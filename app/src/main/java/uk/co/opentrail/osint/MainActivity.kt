@@ -263,7 +263,15 @@ private fun OpenTrailApp() {
                         Text("Uses Android's system resolver. Results can vary by network and DNS provider.")
                     }
                     ToolTab.HASH -> {
-                        Text("SHA-256 text hash", style = MaterialTheme.typography.titleLarge)
+                        Text("Text hash tools", style = MaterialTheme.typography.titleLarge)
+                        Text("Hashes are calculated locally on this device.")
+                        OutlinedTextField(value = input, onValueChange = { input = it }, modifier = Modifier.fillMaxWidth(), label = { Text("Text to hash") }, minLines = 3)
+                        listOf("SHA-256" to "SHA-256", "SHA-1 (legacy)" to "SHA-1", "MD5 (legacy)" to "MD5").forEach { (label, algorithm) ->
+                            OutlinedButton(onClick = {
+                                result = runCatching { MessageDigest.getInstance(algorithm).digest(input.toByteArray(Charsets.UTF_8)).joinToString("") { byte -> "%02x".format(byte) } }
+                                    .getOrElse { "Hash failed: " + (it.message ?: "unknown error") }
+                            }, modifier = Modifier.fillMaxWidth()) { Text("Calculate $label") }
+                        }
                     }
                     ToolTab.NOTES -> {
                         Text("Local case notes", style = MaterialTheme.typography.titleLarge)
