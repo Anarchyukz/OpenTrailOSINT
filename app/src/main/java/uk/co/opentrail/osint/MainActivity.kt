@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
 }
 
 private enum class ToolTab(val title: String) {
-    SEARCH("Public search"), URL("URL triage"), DNS("DNS lookup"), HASH("SHA-256"), NOTES("Case notes")
+    HOLMES("Mr Holmes"), SEARCH("Public search"), URL("URL triage"), DNS("DNS lookup"), HASH("SHA-256"), NOTES("Case notes")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,6 +77,47 @@ private fun OpenTrailApp() {
                     }
                 }
                 when (selected) {
+                    ToolTab.HOLMES -> {
+                        Text("Mr Holmes — username investigation", style = MaterialTheme.typography.titleLarge)
+                        Text("Search public web indexes for a username or alias across multiple platforms. Each search opens in your browser; manually verify any matches.")
+                        OutlinedTextField(
+                            value = input, onValueChange = { input = it }, modifier = Modifier.fillMaxWidth(),
+                            label = { Text("Username or alias (without @)") }, singleLine = true
+                        )
+                        val username = input.trim().removePrefix("@")
+                        val sites = listOf(
+                            "General web" to "https://www.google.com/search?q=" + Uri.encode("\"$username\" (username OR profile)"),
+                            "GitHub" to "site:github.com/$username",
+                            "Reddit" to "site:reddit.com/u/$username OR site:reddit.com/user/$username",
+                            "Facebook" to "site:facebook.com/$username",
+                            "Instagram" to "site:instagram.com/$username",
+                            "TikTok" to "site:tiktok.com/@$username",
+                            "X / Twitter" to "site:x.com/$username OR site:twitter.com/$username",
+                            "YouTube" to "site:youtube.com/@$username",
+                            "Pinterest" to "site:pinterest.com/$username",
+                            "Twitch" to "site:twitch.tv/$username",
+                            "Medium" to "site:medium.com/@$username",
+                            "Telegram public pages" to "site:t.me/$username",
+                            "LinkedIn public results" to "site:linkedin.com/in/$username",
+                            "Mastodon" to "\"$username\" site:mastodon.social OR site:fosstodon.org"
+                        )
+                        Button(onClick = {
+                            if (username.isNotBlank()) {
+                                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=" + Uri.encode("\"$username\" (username OR profile)"))))
+                            }
+                        }, modifier = Modifier.fillMaxWidth()) { Text("Search alias across the web") }
+                        sites.drop(1).forEach { (label, query) ->
+                            OutlinedButton(
+                                onClick = {
+                                    if (username.isNotBlank()) {
+                                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=" + Uri.encode(query))))
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) { Text("Search $label") }
+                        }
+                        Text("A matching username is not proof that accounts belong to the same person. Search results depend on indexing; this does not access private accounts.")
+                    }
                     ToolTab.SEARCH -> {
                         Text("Search publicly available information", style = MaterialTheme.typography.titleLarge)
                         OutlinedTextField(
