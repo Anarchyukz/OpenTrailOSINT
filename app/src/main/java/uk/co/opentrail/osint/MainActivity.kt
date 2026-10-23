@@ -124,11 +124,11 @@ private fun OpenTrailApp() {
                         OutlinedTextField(value = input, onValueChange = { input = it }, modifier = Modifier.fillMaxWidth(), label = { Text("Email address or domain") }, singleLine = true)
                         val q = input.trim()
                         val emailQueries = listOf(
-                            "General web" to "\\"$q\\"",
-                            "Public paste results" to "\\"$q\\" (paste OR leaked OR exposed)",
-                            "GitHub code and profiles" to "site:github.com \\"$q\\"",
-                            "Public documents" to "\\"$q\\" (filetype:pdf OR filetype:doc OR filetype:xls)",
-                            "Gravatar profile" to "site:gravatar.com \\"$q\\""
+                            "General web" to "\"$q\"",
+                            "Public paste results" to "\"$q\" (paste OR leaked OR exposed)",
+                            "GitHub code and profiles" to "site:github.com \"$q\"",
+                            "Public documents" to "\"$q\" (filetype:pdf OR filetype:doc OR filetype:xls)",
+                            "Gravatar profile" to "site:gravatar.com \"$q\""
                         )
                         emailQueries.forEach { (label, query) ->
                             OutlinedButton(onClick = { if (q.isNotBlank()) context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=" + Uri.encode(query)))) }, modifier = Modifier.fillMaxWidth()) { Text("Search $label") }
@@ -140,10 +140,10 @@ private fun OpenTrailApp() {
                         OutlinedTextField(value = input, onValueChange = { input = it }, modifier = Modifier.fillMaxWidth(), label = { Text("+44… phone number") }, singleLine = true)
                         val q = input.trim()
                         listOf(
-                            "Exact number" to "\\"$q\\"",
-                            "Public business listings" to "\\"$q\\" (contact OR business)",
-                            "Public social profiles" to "\\"$q\\" (profile OR contact)",
-                            "Complaints / spam reports" to "\\"$q\\" (spam OR scam OR nuisance)"
+                            "Exact number" to "\"$q\"",
+                            "Public business listings" to "\"$q\" (contact OR business)",
+                            "Public social profiles" to "\"$q\" (profile OR contact)",
+                            "Complaints / spam reports" to "\"$q\" (spam OR scam OR nuisance)"
                         ).forEach { (label, query) ->
                             OutlinedButton(onClick = { if (q.isNotBlank()) context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=" + Uri.encode(query)))) }, modifier = Modifier.fillMaxWidth()) { Text("Search $label") }
                         }
@@ -183,11 +183,11 @@ private fun OpenTrailApp() {
                         OutlinedTextField(value = input, onValueChange = { input = it }, modifier = Modifier.fillMaxWidth(), label = { Text("IPv4 or IPv6 address") }, singleLine = true)
                         val ip = input.trim()
                         listOf(
-                            "General search" to "https://www.google.com/search?q=" + Uri.encode("\\"$ip\\""),
+                            "General search" to "https://www.google.com/search?q=" + Uri.encode("\"$ip\""),
                             "AbuseIPDB public reports" to "https://www.google.com/search?q=" + Uri.encode("site:abuseipdb.com/check $ip"),
                             "VirusTotal public page" to "https://www.google.com/search?q=" + Uri.encode("site:virustotal.com/gui/ip-address $ip"),
                             "GreyNoise public context" to "https://www.google.com/search?q=" + Uri.encode("site:viz.greynoise.io $ip"),
-                            "Reverse DNS" to "https://www.google.com/search?q=" + Uri.encode("\\"$ip\\" reverse DNS")
+                            "Reverse DNS" to "https://www.google.com/search?q=" + Uri.encode("\"$ip\" reverse DNS")
                         ).forEach { (label, url) ->
                             OutlinedButton(onClick = { if (ip.isNotBlank()) context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }, modifier = Modifier.fillMaxWidth()) { Text(label) }
                         }
